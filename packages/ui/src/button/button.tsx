@@ -7,6 +7,7 @@
 import * as React from "react";
 
 import { cn } from "../utils";
+import { Spinner } from "../spinners";
 import type { TButtonVariant, TButtonSizes } from "./helper";
 import { getIconStyling, getButtonStyling } from "./helper";
 
@@ -40,9 +41,17 @@ const Button = React.forwardRef(function Button(props: ButtonProps, ref: React.F
 
   return (
     <button ref={ref} type={type} className={cn(buttonStyle, className)} disabled={disabled || loading} {...rest}>
-      {prependIcon && <div className={buttonIconStyle}>{React.cloneElement(prependIcon, { strokeWidth: 2 })}</div>}
+      {loading ? (
+        <div className={buttonIconStyle}>
+          <Spinner className="h-full w-full" />
+        </div>
+      ) : (
+        prependIcon && <div className={buttonIconStyle}>{React.cloneElement(prependIcon, { strokeWidth: 2 })}</div>
+      )}
       {children}
-      {appendIcon && <div className={buttonIconStyle}>{React.cloneElement(appendIcon, { strokeWidth: 2 })}</div>}
+      {appendIcon && !loading && (
+        <div className={buttonIconStyle}>{React.cloneElement(appendIcon, { strokeWidth: 2 })}</div>
+      )}
     </button>
   );
 });
